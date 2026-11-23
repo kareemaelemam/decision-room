@@ -565,3 +565,31 @@ GitHub CLI is now installed and authenticated as kareemaelemam. The initial sand
 Repeated commands: npm.cmd run type-check PASS; npm.cmd run lint PASS; npm.cmd run test:unit PASS (48 tests, 8 files); npm.cmd run build PASS. Create Room and Join Room remain adjacent on the authenticated dashboard; the existing invitation dialog and secure acceptance route are present. Candidate audit: 111 files, zero private-key/GitHub-token/JWT/AWS-key markers; .dev.vars, .env variants, dependencies, builds, runtime state and private keys are ignored. This is a targeted scan, not a guarantee against every possible credential format.
 
 Official deployment and source-control documentation was rechecked. app source reports unclaimed revision 0. The first deployment must use the intended GitHub remote. Local development data is separate from production; no local records will be migrated. Current changes at this stage: README.md and docs/BUILD_LOG.md only; application code unchanged. USER-VERIFIED local tests remain attributed to the applicant, not Codex.
+
+### GitHub publication completed; deployment blocked
+
+- Initial commit: 0f9a311, Build DecisionRoom collaborative decision MVP; main pushed to origin. Initial diff: 111 files, 18,738 insertions.
+- Public repository: https://github.com/kareemaelemam/decision-room. gh repo view confirmed PUBLIC and default branch main; an unauthenticated HTTP request returned 200.
+- Before deployment: working tree clean, sourceInference github, source unclaimed.
+- Executed npx.cmd deepspace deploy --json. Build succeeded (26 seconds), six Durable Object bindings validated, 24 assets uploaded. Command exited 1 with code route_taken: The name decision-room.app.space is taken by another app. No source code/configuration workaround or rename was applied.
+- Post-failure app source confirms provider github, repository kareemaelemam/decision-room, revision 1. Status reports live:null. The source claim persisted despite the route failure, as documented.
+- Actual deployed URL: NONE confirmed. Do not treat the occupied domain as this application's URL. Production browser/authentication/dashboard/dialog/persistence/multi-user tests were NOT performed because no release exists.
+- Blocking next action: applicant chooses an alternative public app name, such as decision-room-kareemaelemam (availability unverified). Preserve DEEPSPACE_APP_ID, change only the deployment name as approved, commit/push, then retry supported deployment.
+
+Changed this continuation: README.md and docs/BUILD_LOG.md; application implementation unchanged. No new dependencies/features. Documentation is committed and pushed separately after recording the failed deployment.
+
+### Production acceptance still required after successful deployment
+
+1. Open the returned live URL; sign in with Google in profile A. Check Create Room and Join Room side by side at desktop and phone widths; test dialog focus, Escape, malformed input, and valid URL/token.
+2. Create a production room and refresh/sign out/in to verify persistence. Local rooms will not be copied automatically.
+3. In profile B with a second account, use Join Room to paste A's invitation, explicitly accept, and confirm redirection to the actual room. Test direct invitation URL as well.
+4. Both users add options/comments and vote without refreshing; change a vote and verify exactly two total votes, 50/50 and 100/0 cases, zero votes, and reconnect recovery.
+5. A third unrelated identity must not see or access the room; check invalid/expired invitations fail gracefully.
+
+USER-VERIFIED (local, applicant report, NOT Codex): Google sign-in, creating a room, refresh persistence, invitation links in a second browser profile, and two-user realtime voting. Automated verification this continuation: TypeScript PASS, lint PASS, 48 unit tests across 8 files PASS, production build PASS. Isolated runtime tests cover database persistence and synchronized records; they do not certify production OAuth. Prior desktop/mobile dialog component checks used mocked SDK identity.
+
+### Submission draft
+
+DecisionRoom helps teams make decisions in private rooms: invite members, compare options, discuss tradeoffs, and vote with live results. It uses DeepSpace authentication, schema-based SQLite records, team permissions, validated Worker actions, and native realtime subscriptions. I prioritized reliable collaboration over additional integrations or AI summaries. Codex implemented the UI, backend, permission checks, tests, and documentation; I personally verified Google login, creation, refresh persistence, invitations across browser profiles, and two-user live voting locally. Known limits include reusable seven-day invites without revocation, append-only options/comments, and an SDK membership refresh workaround. Source: https://github.com/kareemaelemam/decision-room. Hosting is pending resolution of the occupied deployment domain; no production success is claimed.
+
+Interview explanation: DecisionRoom uses React for the interface and DeepSpace for authentication, persistent records, and realtime subscriptions. Private room access is enforced on the server. Votes use a deterministic room/user key and database uniqueness so changing a vote cannot add another active vote. I kept the scope focused on secure collaboration and tested concurrent writes and persistence, while documenting what still needs production acceptance.
