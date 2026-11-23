@@ -593,3 +593,33 @@ USER-VERIFIED (local, applicant report, NOT Codex): Google sign-in, creating a r
 DecisionRoom helps teams make decisions in private rooms: invite members, compare options, discuss tradeoffs, and vote with live results. It uses DeepSpace authentication, schema-based SQLite records, team permissions, validated Worker actions, and native realtime subscriptions. I prioritized reliable collaboration over additional integrations or AI summaries. Codex implemented the UI, backend, permission checks, tests, and documentation; I personally verified Google login, creation, refresh persistence, invitations across browser profiles, and two-user live voting locally. Known limits include reusable seven-day invites without revocation, append-only options/comments, and an SDK membership refresh workaround. Source: https://github.com/kareemaelemam/decision-room. Hosting is pending resolution of the occupied deployment domain; no production success is claimed.
 
 Interview explanation: DecisionRoom uses React for the interface and DeepSpace for authentication, persistent records, and realtime subscriptions. Private room access is enforced on the server. Votes use a deterministic room/user key and database uniqueness so changing a vote cannot add another active vote. I kept the scope focused on secure collaboration and tested concurrent writes and persistence, while documenting what still needs production acceptance.
+
+## Successful production deployment - November 22, 2026 (Eastern)
+
+The applicant approved decision-room-kareemaelemam, with one fallback if unavailable. The first approved name succeeded; no fallback was needed. Official deployment documentation and installed CLI help confirmed changing the top-level wrangler name and using --rename.
+
+Only functional configuration change: wrangler.toml line 1, name decision-room -> decision-room-kareemaelemam. APP_NAME, all application code, schemas, migrations, bindings and DEEPSPACE_APP_ID app_01M82YBVRSJV4KSHK02TX9JPEP were preserved. Commit 8d330c0 was pushed to origin/main before deploying. Existing database identity and GitHub source were retained; no app initialization, new environment or database replacement occurred.
+
+Executed: npx.cmd deepspace deploy --rename --json. Exit 0. Build succeeded (24s), six Durable Object bindings validated, asset upload completed, platform commit succeeded. CLI confirmed edge and data plane readiness.
+
+- Live URL: https://decision-room-kareemaelemam.app.space
+- Repository: https://github.com/kareemaelemam/decision-room
+- Release ID: rel_01M83996V0SJAVSJF9ZY8XZH81
+- serving: confirmed; dataPlane: confirmed; dirty: false; branch: main.
+- Post-deployment app source: github, kareemaelemam/decision-room, revision 1; unchanged app ID.
+
+Production checks actually performed by Codex: unauthenticated HTTP GET returned 200; integrated browser rendered the landing page and opened /home; signed-out workspace displayed its authentication requirement; clicking sign-in opened the provider dialog with Google and GitHub. The live dashboard asset home-BubfkL4U.js returned 200 and contained Create Room, Join Room, and Invitation URL or token. Source inspection confirms adjacent buttons. This bundle check is NOT authenticated visual interaction testing. No OAuth login, production room write, invitation acceptance or production multi-user voting was performed. Browser emitted a non-blocking unrecognized document-domain Permissions-Policy warning. The first bundle-check helper failed on mixed CommonJS/ESM syntax; correcting the helper to ESM produced the recorded successful response; application code was unaffected.
+
+The deployment rebuilt the app successfully, including the configured lint checker. No application code changed, so the prior verified TypeScript/lint/48-unit-test results remain the most recent standalone runs; they were not rerun or relabeled as production tests. Earlier USER-VERIFIED local checks remain attributed to the applicant only.
+
+Files changed this continuation: wrangler.toml (deployment name only), README.md (live status), docs/BUILD_LOG.md (evidence and checklist). Documentation is committed and pushed after the successful release; no further deployment is needed for these documentation-only changes.
+
+### Production checklist for the applicant
+
+1. At the live URL, sign in with Google in profile A. Confirm Create Room and Join Room are visible and usable on desktop and phone widths.
+2. Create a room; refresh, sign out and sign back in to confirm persistence. Development rooms are not copied to production.
+3. Generate an invitation. In a second profile/account B, paste the URL into Join Room, explicitly accept and confirm redirection to the correct room. Repeat with the raw token and with a direct invitation link; check invalid/expired invitations show helpful errors.
+4. Both accounts add options/comments and see them without refreshing. Cast different votes (two total, 50/50), change one vote (still two total), refresh and reconnect to confirm persistence and synchronized results.
+5. Confirm an unrelated account cannot access the private room.
+
+No deployment blockers remain observed. Signed-in production acceptance is still unverified. Known product and SDK limitations in earlier sections remain unchanged.

@@ -2,7 +2,7 @@
 
 A private workspace for a team to compare options, discuss tradeoffs, and vote on a shared decision in real time.
 
-Built for the DeepSpace Summer 2027 Software Engineering Internship assignment. The core MVP is implemented and published at [kareemaelemam/decision-room](https://github.com/kareemaelemam/decision-room). **Deployment is blocked:** DeepSpace rejected `decision-room.app.space` because another app owns that name. No live release is confirmed; a different domain needs applicant approval.
+Built for the DeepSpace Summer 2027 Software Engineering Internship assignment. The core MVP is implemented and published at [kareemaelemam/decision-room](https://github.com/kareemaelemam/decision-room). **Live application:** [decision-room-kareemaelemam.app.space](https://decision-room-kareemaelemam.app.space). DeepSpace confirmed serving and data-plane readiness; signed-in production acceptance remains to be completed.
 
 ## The user journey
 
@@ -39,7 +39,7 @@ Collections: `decision_rooms`, `team_members`, `room_invites`, `room_options`, `
 - Native team-membership read policies applied before private records reach clients.
 - Authenticated server actions and acknowledged database writes.
 - Realtime record subscriptions, reconnection, and database snapshots.
-- Cloudflare build integration and deployment manifest support; deployment was attempted but rejected because the configured name is taken.
+- Cloudflare build integration and deployment manifest support; deployed successfully using the supported DeepSpace CLI.
 
 The priority is reliable collaborative decisions. Authentication, persistence, authorization, and realtime delivery directly support that journey. Adding unrelated integrations would introduce more configuration and failure modes without improving the core assignment. **AI summaries are not implemented.** Scaffold integration/agent infrastructure exists, but it is not presented as a completed user-facing AI feature.
 
@@ -94,8 +94,9 @@ Publication and GitHub-source deployment are authorized. The current verificatio
 - [x] Run typecheck, lint, unit tests, and production build.
 - [x] Publish the reviewed main branch to the public kareemaelemam/decision-room repository.
 - [x] Confirm GitHub source before deployment; the attempted release permanently claimed kareemaelemam/decision-room at revision 1.
-- [ ] Complete deployment: `npx.cmd deepspace deploy --json` failed with `route_taken`. A new domain must be selected; the app ID and GitHub source must remain unchanged.
-- [ ] Check the live public page and repeat signed-in, two-profile acceptance in production.
+- [x] Deploy with the approved name decision-room-kareemaelemam using `npx.cmd deepspace deploy --rename --json`; serving and data plane confirmed. App ID and GitHub source preserved.
+- [x] Check the live public page, signed-out workspace and authentication dialog.
+- [ ] Repeat signed-in, two-profile acceptance in production.
 
 Local Miniflare/SQLite state is separate from hosted production Durable Objects; deploying does not copy local rooms. Integration tests use a third, disposable database. Platform authentication may use the same remote identity service locally and in production; sharing identity does not mean sharing room storage. Production records persist across subsequent deploys. Named Wrangler environments are separate apps and require their own app IDs/configuration. See [deployment](https://docs.deep.space/concepts/deployment.md), [source control](https://docs.deep.space/guides/source-control.md), and [releases/rollback](https://docs.deep.space/guides/releases-and-rollback.md).
 
